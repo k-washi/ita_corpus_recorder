@@ -1,0 +1,3 @@
+[submodule "ita-corpus"]
+	path = ita-corpus
+	url = https://github.com/mmorise/ita-corpus.git
