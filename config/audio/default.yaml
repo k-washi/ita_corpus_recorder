@@ -1,0 +1,5 @@
+start_trim_sec: 0.1 # 録音時に最初に切り取る時間
+end_trim_sec: 0.1 # 録音時に最後を切り取る時間
+
+sampling_rate: 24000
+sample_bit: 16

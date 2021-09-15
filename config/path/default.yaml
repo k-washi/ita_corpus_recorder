@@ -1,0 +1,6 @@
+emotion_corpus: ita-corpus/emotion_transcript_utf8.txt
+recitation_corpus: ita-corpus/recitation_transcript_utf8.txt
+
+record_dir: data
+recorded_dir: recorded
+eval_dir: eval
