@@ -155,7 +155,7 @@ class AudioProcessing():
 
         if len(self.__record_list) == 0:
             print(f"録音結果は空です。")
-            return False
+            return False, None
 
         cut_index = int(self.end_tirm_sec * self.sampling_rate)
         if len(self.record_list) > cut_index:
@@ -173,7 +173,7 @@ class AudioProcessing():
             ww.writeframes(data)
         
         print(f"{wav_path}を保存しました。")
-        return True
+        return True, output_data
     
     def listen_callback(self, in_data, frame_count, time_info, status):
         if self.wf is not None:

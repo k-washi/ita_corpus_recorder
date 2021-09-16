@@ -3,6 +3,10 @@ import tkinter as tk
 from tkinter import ttk
 from src.load_corpus import load_corpus, split_corpus
 from src.utils import get_eval_index, get_recorded_index
+
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+import numpy as np
 from src.audio.signal import AudioProcessing
 import shutil
 class RecordFrame(tk.Frame):
@@ -29,6 +33,7 @@ class RecordFrame(tk.Frame):
         self.create_text_widgets()
         self.create_list_box()
         self.create_widgets()
+        self.plot_canvas()
     
     def load_corpus(self):
         # コーパスの読み込み
@@ -49,6 +54,16 @@ class RecordFrame(tk.Frame):
             corpus[c[0]] = c[1]
         print(len(corpus.keys()))
         return corpus
+    
+    def plot_canvas(self):
+        fig = Figure(figsize=(3, 2))   #Figure
+        fig.tight_layout()
+        self.ax = fig.add_subplot(1, 1, 1)           #Axes
+        self.ax.axis('off')
+        self.wav_canvas = Figure(figsize=(3, 3)) 
+        self.wav_canvas = FigureCanvasTkAgg(fig, self)
+        self.wav_canvas.get_tk_widget().grid(row=0, column=7, rowspan=3, columnspan=3, padx=5, pady=10)
+
 
     def create_list_box(self):
         self.corpus_dic = self.load_corpus()
@@ -161,14 +176,30 @@ class RecordFrame(tk.Frame):
             self.publish_button.config(fg="white")
            
             self.audio_proc.record_stop() 
-            ok = self.audio_proc.save(self._tmp_audio_path) #一時保存
+            ok, data = self.audio_proc.save(self._tmp_audio_path) #一時保存
             if not ok:
                 print("recordはemptyです！")
+            else:
+                self.plot_update(data)
 
             self.recording = False
             self.has_recorded_audio = True
             
+    def plot_update(self, data):
         
+        x = np.arange(len(data)) / self.cnf.audio.sampling_rate
+        data = np.array(data)
+        wmax = np.max(np.abs(data))
+        data = data / (wmax+0.2)
+        self.ax.cla()
+        self.line = self.ax.plot(x, data)
+        self.ax.get_yaxis().set_visible(False)
+        self.ax.set_xlim([0, x[-1]])
+        self.ax.set_ylim([-1.1,1.1])
+        #self.ax.axis('tight')
+        
+        
+        self.wav_canvas.draw()
     
     def listen_audio(self):
         if self.active and not self.recording and self.has_recorded_audio:
