@@ -37,3 +37,9 @@ ModuleNotFoundError: No module named '_tkinter'
 ```
 
 [Install tkinter on macOS](https://blog.lanzani.nl/2020/install-tkinter-macos/)
+
+
+## 音声データが入力されない
+
+ターミナルにマイクへの権限が当てられているか確認する。
+また、VSCodeからではなく、ターミナルから実行する。

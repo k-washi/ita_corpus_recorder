@@ -3,12 +3,22 @@ import tkinter as tk
 from tkinter import ttk
 from src.load_corpus import load_corpus, split_corpus
 from src.utils import get_eval_index, get_recorded_index
-
+from src.audio.signal import AudioProcessing
+import shutil
 class RecordFrame(tk.Frame):
-    def __init__(self, master, cnf):
+    def __init__(self, master, in_mic, out_mic, cnf):
         super().__init__(master)        
         self.cnf = cnf
+        self.in_mic = in_mic
+        self.out_mic = out_mic
         
+        # 一時保存用のpathを作成
+        os.makedirs(self.cnf.audio.tmp_dir, exist_ok=True)
+        self._tmp_audio_path = os.path.join(self.cnf.audio.tmp_dir, self.cnf.audio.tmp_wav)
+
+        self.audio_proc = AudioProcessing(self.in_mic, self.out_mic, self.cnf)
+        
+        self.recorded_dir = os.path.join(self.cnf.path.record_dir, self.cnf.path.recorded_dir)
         
         self.now_record_selected = -1
         self.now_record_index = ""
@@ -29,8 +39,8 @@ class RecordFrame(tk.Frame):
 
         # 録音済みデータ、評価済みデータを除去
         recorded_index = get_recorded_index(self.cnf)
-        eval_index = get_eval_index(self.cnf)
-        saved_index = recorded_index + eval_index
+        # eval_index = get_eval_index(self.cnf)
+        saved_index = recorded_index #+ eval_index
 
         corpus = {}
         for c in tmp_corpus:
@@ -132,6 +142,9 @@ class RecordFrame(tk.Frame):
             self.publish_button.config(fg="gray")
 
             self.recording = True
+            self.listening = False
+            self.audio_proc.record_start()
+            
 
             if not self.has_recorded_audio:
                 # 選択が反映される
@@ -147,7 +160,11 @@ class RecordFrame(tk.Frame):
             self.listen_button.config(fg="white")
             self.publish_button.config(fg="white")
            
-            
+            self.audio_proc.record_stop() 
+            ok = self.audio_proc.save(self._tmp_audio_path) #一時保存
+            if not ok:
+                print("recordはemptyです！")
+
             self.recording = False
             self.has_recorded_audio = True
             
@@ -157,13 +174,21 @@ class RecordFrame(tk.Frame):
         if self.active and not self.recording and self.has_recorded_audio:
             print("聞く。")
             self.listening = True
-
-            self.listening = False
+            self.audio_proc.open_and_listen(self._tmp_audio_path)
+            
+            
+           
             
 
     def publish_audio(self):
         if self.active and not self.recording and self.has_recorded_audio:
             print("提出しました。")
+            audio_path = os.path.join(self.recorded_dir, self.now_record_index+".wav")
+            shutil.move(
+                self._tmp_audio_path,
+                audio_path
+            )
+
             self.record_button.config(fg="white")
             self.stop_button.config(fg="gray")
             self.listen_button.config(fg="gray")
