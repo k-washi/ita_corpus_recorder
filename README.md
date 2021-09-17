@@ -15,6 +15,10 @@ ITAコーパス 録音用
 git submodule update --init
 ```
 
+```
+pip install -r requirements.txt
+```
+
 # 実行
 
 使用できるデバイスの一覧を表示
@@ -32,6 +36,21 @@ Index: 4 | Name: HyperX Quadcast | ChannelNum: in 2 out 0 | SampleRate: 48000 Hz
 ```
 python app.py -i 4 -o 1
 ```
+
+# config
+
+config/audio/default.yaml
+```
+start_trim_sec: 0.1 # 録音時に最初に切り取る時間
+end_trim_sec: 0.3 # 録音時に最後を切り取る時間
+```
+で、クリック音とか消すようにしている。
+
+config/path/default.yaml
+```
+record_dir: data
+```
+保存するパス設定している
 
 # Mac install
 
