@@ -15,6 +15,24 @@ ITAコーパス 録音用
 git submodule update --init
 ```
 
+# 実行
+
+使用できるデバイスの一覧を表示
+```
+python app_device.py
+
+Index: 0 | Name: Built-in Microphone | ChannelNum: in 2 out 0 | SampleRate: 44100 Hz
+Index: 1 | Name: Built-in Output | ChannelNum: in 0 out 2 | SampleRate: 44100 Hz
+Index: 2 | Name: DisplayPort | ChannelNum: in 0 out 2 | SampleRate: 48000 Hz
+Index: 3 | Name: HyperX Quadcast | ChannelNum: in 0 out 2 | SampleRate: 48000 Hz
+Index: 4 | Name: HyperX Quadcast | ChannelNum: in 2 out 0 | SampleRate: 48000 Hz
+```
+
+録音(-i マイク, -o 出力デバイス)
+```
+python app.py -i 4 -o 1
+```
+
 # Mac install
 
 ```
