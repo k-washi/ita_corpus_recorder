@@ -150,7 +150,7 @@ class RecordFrame(tk.Frame):
     
     def record_start(self):
         if self.active and not self.recording:
-            print("Record")
+            
             self.record_button.config(fg="gray")
             self.stop_button.config(fg="white")
             self.listen_button.config(fg="gray")
@@ -166,10 +166,10 @@ class RecordFrame(tk.Frame):
 
                 self.now_record_selected = self.corpus_listbox.curselection()
                 self.now_record_index = self.corpus_listbox.get(self.now_record_selected)
+            print("Record")
 
     def record_stop(self): 
-        if self.active and self.recording and not self.listening:
-            print("Stop")
+        if self.active and self.recording and not self.listening: 
             self.record_button.config(fg="white")
             self.stop_button.config(fg="gray")
             self.listen_button.config(fg="white")
@@ -184,6 +184,8 @@ class RecordFrame(tk.Frame):
 
             self.recording = False
             self.has_recorded_audio = True
+
+            print("Stop")
             
     def plot_update(self, data):
         
@@ -203,9 +205,9 @@ class RecordFrame(tk.Frame):
     
     def listen_audio(self):
         if self.active and not self.recording and self.has_recorded_audio:
-            print("聞く。")
             self.listening = True
             self.audio_proc.open_and_listen(self._tmp_audio_path)
+            print("聞く。")
             
             
            
@@ -213,7 +215,6 @@ class RecordFrame(tk.Frame):
 
     def publish_audio(self):
         if self.active and not self.recording and self.has_recorded_audio:
-            print("提出しました。")
             audio_path = os.path.join(self.recorded_dir, self.now_record_index+".wav")
             shutil.move(
                 self._tmp_audio_path,
@@ -227,7 +228,8 @@ class RecordFrame(tk.Frame):
             self.listening = False
             self.has_recorded_audio = False
             self.create_list_box()
-        
+
+            print("提出しました。")
 
 
 
