@@ -80,3 +80,12 @@ ModuleNotFoundError: No module named '_tkinter'
 
 ターミナルにマイクへの権限が当てられているか確認する。
 また、VSCodeからではなく、ターミナルから実行する。
+
+## ボタンの配置などがおかしい (動かない in mac)
+
+[](https://stackoverflow.com/questions/60469202/unable-to-install-tkinter-with-pyenv-pythons-on-macos/60469203#60469203)
+の Here is step by step guide **
+で最後、以下のコマンドなるようにインストールしたところ、動いた！
+```
+env PYTHON_CONFIGURE_OPTS="--with-tcltk-includes='-I/usr/local/opt/tcl-tk/include' --with-tcltk-libs='-L/usr/local/opt/tcl-tk/lib -ltcl8.6 -ltk8.6' --enable-shared" pyenv install 3.8.5
+```

@@ -146,13 +146,13 @@ class RecordFrame(tk.Frame):
         self.active = True
         if not self.recording and not self.has_recorded_audio:
             self.text_update()
-            self.record_button.config(fg="white")
+            self.record_button.config(fg="red")
     
     def record_start(self):
         if self.active and not self.recording:
             
             self.record_button.config(fg="gray")
-            self.stop_button.config(fg="white")
+            self.stop_button.config(fg="red")
             self.listen_button.config(fg="gray")
             self.publish_button.config(fg="gray")
 
@@ -170,10 +170,10 @@ class RecordFrame(tk.Frame):
 
     def record_stop(self): 
         if self.active and self.recording and not self.listening: 
-            self.record_button.config(fg="white")
+            self.record_button.config(fg="red")
             self.stop_button.config(fg="gray")
-            self.listen_button.config(fg="white")
-            self.publish_button.config(fg="white")
+            self.listen_button.config(fg="red")
+            self.publish_button.config(fg="red")
            
             self.audio_proc.record_stop() 
             ok, data = self.audio_proc.save(self._tmp_audio_path) #一時保存
@@ -221,7 +221,7 @@ class RecordFrame(tk.Frame):
                 audio_path
             )
 
-            self.record_button.config(fg="white")
+            self.record_button.config(fg="red")
             self.stop_button.config(fg="gray")
             self.listen_button.config(fg="gray")
             self.publish_button.config(fg="gray")
